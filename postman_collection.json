@@ -1,0 +1,1553 @@
+{
+  "info": {
+    "_postman_id": "coffee-shop-pos-collection",
+    "name": "Coffee Shop POS",
+    "description": "API Collection for Coffee Shop Point of Sales System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"cashier01\",\n  \"password\": \"securepassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "include_deleted",
+                  "value": "false",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pastry\",\n  \"description\": \"Fresh baked pastries\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Pastry\",\n  \"description\": \"Fresh baked premium pastries\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440002"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/categories/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "categories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440002"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "category_id",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "is_active",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440010"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"COF-LAT-001\",\n  \"name\": \"Caffe Latte\",\n  \"description\": \"Espresso with steamed milk\",\n  \"category_id\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"price\": 3500000,\n  \"stock\": 100,\n  \"min_stock\": 10,\n  \"is_active\": true,\n  \"images\": [\n    {\n      \"file_path\": \"/products/latte.jpg\",\n      \"file_name\": \"latte.jpg\",\n      \"file_size\": 245000,\n      \"mime_type\": \"image/jpeg\",\n      \"is_primary\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Caffe Latte Premium\",\n  \"price\": 4000000,\n  \"description\": \"Premium espresso with steamed milk\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440010"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Product Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440010"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440010"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Product Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "is_primary",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/:id/images",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", ":id", "images"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440010"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Stock",
+      "item": [
+        {
+          "name": "Get Stock Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/stock?low_stock=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stock"],
+              "query": [
+                {
+                  "key": "low_stock",
+                  "value": "false"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stock Movements",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/stock/movements?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stock", "movements"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "product_id",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "movement_type",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "source",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Stock (Stock In)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"550e8400-e29b-41d4-a716-446655440010\",\n  \"quantity\": 50,\n  \"source\": \"purchase\",\n  \"notes\": \"Restock from supplier ABC\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/stock/in",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stock", "in"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reduce Stock (Stock Out)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"550e8400-e29b-41d4-a716-446655440010\",\n  \"quantity\": 5,\n  \"source\": \"waste\",\n  \"notes\": \"Spilled during preparation\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/stock/out",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stock", "out"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tables",
+      "item": [
+        {
+          "name": "Get All Tables",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tables",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tables"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "include_deleted",
+                  "value": "false",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Table",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"table_number\": \"T10\",\n  \"capacity\": 6,\n  \"location\": \"vip\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/tables",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tables"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Table",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"table_number\": \"T10A\",\n  \"capacity\": 8,\n  \"location\": \"vip\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/tables/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tables", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440060"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Table",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/tables/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "tables", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440060"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cashiers",
+      "item": [
+        {
+          "name": "Get All Cashiers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/cashiers?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "cashiers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "is_active",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Cashier",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"cashier02\",\n  \"password\": \"securepassword123\",\n  \"full_name\": \"Jane Barista\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/cashiers",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "cashiers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cashier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Jane Barista Senior\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/cashiers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "cashiers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Cashier Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"new_password\": \"newsecurepassword456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/cashiers/:id/reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "cashiers", ":id", "reset-password"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Cashier",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/cashiers/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "cashiers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440001"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Promos",
+      "item": [
+        {
+          "name": "Get All Promos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/promos?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "promos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "is_active",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Promos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/promos/active",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "promos", "active"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Promo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Weekend Special\",\n  \"description\": \"Rp 10.000 off for weekend purchases\",\n  \"type\": \"nominal\",\n  \"value\": 1000000,\n  \"min_transaction\": 3000000,\n  \"started_at\": \"2026-03-22T00:00:00Z\",\n  \"ended_at\": \"2026-03-24T23:59:59Z\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/promos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "promos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Promo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Weekend Special Extended\",\n  \"ended_at\": \"2026-03-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/promos/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "promos", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440201"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Promo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/promos/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "promos", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440201"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get Revenue Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reports/revenue?period=daily",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "reports", "revenue"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "daily"
+                },
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Best Selling Products Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reports/best-sellers?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "reports", "best-sellers"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cashier Performance Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reports/cashier-performance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "reports", "cashier-performance"],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "cashier_id",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Export Transactions to CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/reports/transactions/export?start_date=2026-03-01&end_date=2026-03-20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "reports", "transactions", "export"],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2026-03-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-03-20"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Shifts",
+      "item": [
+        {
+          "name": "Get Current Shift",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/shifts/current",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "shifts", "current"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Open Shift",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opening_balance\": 50000000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/shifts/open",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "shifts", "open"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Close Shift",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"closing_balance\": 125000000,\n  \"closing_notes\": \"All transactions completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/shifts/:id/close",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "shifts", ":id", "close"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440300"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Shift History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/shifts/history?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "shifts", "history"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "start_date",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "end_date",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get Active Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders?status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "table_id",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "shift_id",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"table_id\": \"550e8400-e29b-41d4-a716-446655440050\",\n  \"is_takeaway\": false,\n  \"items\": [\n    {\n      \"product_id\": \"550e8400-e29b-41d4-a716-446655440010\",\n      \"quantity\": 2,\n      \"notes\": \"Less sugar\"\n    },\n    {\n      \"product_id\": \"550e8400-e29b-41d4-a716-446655440011\",\n      \"quantity\": 1,\n      \"notes\": \"Extra hot\"\n    }\n  ],\n  \"customer_notes\": \"For here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Apply Promo to Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"promo_id\": \"550e8400-e29b-41d4-a716-446655440200\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/:id/promo",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", ":id", "promo"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Promo from Order",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/:id/promo",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", ":id", "promo"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Customer changed mind\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/:id/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", ":id", "cancel"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Initiate Payment (Midtrans Snap)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_name\": \"John Doe\",\n  \"customer_email\": \"john@example.com\",\n  \"customer_phone\": \"081234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/:id/pay",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", ":id", "pay"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/:transaction_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payments", ":transaction_id"],
+              "variable": [
+                {
+                  "key": "transaction_id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Midtrans Webhook Handler",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Midtrans-Signature",
+                "value": "{{midtrans_signature}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order_id\": \"TRX-20260320-0001-PAY\",\n  \"transaction_id\": \"b54a14d7-60a7-4ca2-ae35-d0802d063ae5\",\n  \"transaction_time\": \"2026-03-20 10:15:00\",\n  \"transaction_status\": \"capture\",\n  \"fraud_status\": \"accept\",\n  \"payment_type\": \"gopay\",\n  \"gross_amount\": \"35000.00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/webhook",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payments", "webhook"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transaction Receipt",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/payments/:transaction_id/receipt",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "payments", ":transaction_id", "receipt"],
+              "variable": [
+                {
+                  "key": "transaction_id",
+                  "value": "550e8400-e29b-41d4-a716-446655440400"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
