@@ -1,0 +1,13 @@
+-- +migrate Down
+DROP TABLE IF EXISTS refunds;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS transaction_items;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS promos;
+DROP TABLE IF EXISTS stock_movements;
+DROP TABLE IF EXISTS shifts;
+DROP TABLE IF EXISTS `tables`;
+DROP TABLE IF EXISTS product_images;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
