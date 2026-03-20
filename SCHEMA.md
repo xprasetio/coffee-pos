@@ -31,9 +31,9 @@ Menyimpan data user yang dapat mengakses sistem (Owner dan Cashier).
 | Kolom | Tipe Data | Constraint | Keterangan |
 |-------|-----------|------------|------------|
 | `id` | VARCHAR(36) | PRIMARY KEY | UUID |
-| `username` | VARCHAR(50) | UNIQUE, NOT NULL | Username untuk login |
-| `password_hash` | VARCHAR(255) | NOT NULL | Hash password (bcrypt) |
-| `full_name` | VARCHAR(100) | NOT NULL | Nama lengkap |
+| `email` | VARCHAR(50) | UNIQUE, NOT NULL | Email untuk login |
+| `password` | VARCHAR(255) | NOT NULL | Hash password (bcrypt) |
+| `name` | VARCHAR(100) | NOT NULL | Nama lengkap |
 | `role` | ENUM('owner', 'cashier') | NOT NULL | Role user |
 | `is_active` | TINYINT(1) | DEFAULT 1 | Status aktif (1=aktif, 0=nonaktif) |
 | `created_at` | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Waktu pembuatan record |
@@ -41,7 +41,7 @@ Menyimpan data user yang dapat mengakses sistem (Owner dan Cashier).
 | `deleted_at` | TIMESTAMP | NULL | Soft delete timestamp |
 
 **Index:**
-- `idx_username` pada `username`
+- `idx_email` pada `email`
 - `idx_role` pada `role`
 - `idx_is_active` pada `is_active`
 

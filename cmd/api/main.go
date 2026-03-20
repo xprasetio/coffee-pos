@@ -8,6 +8,7 @@ import (
 	"github.com/xprasetio/coffee-pos/internal/handler"
 	"github.com/xprasetio/coffee-pos/pkg/database"
 	"github.com/xprasetio/coffee-pos/pkg/redis"
+	"github.com/xprasetio/coffee-pos/pkg/validator"
 )
 
 func main() {
@@ -37,8 +38,11 @@ func main() {
 	defer rdb.Close()
 	fmt.Println("Redis connected.")
 
+	// Initialize validator
+	v := validator.New()
+
 	// Initialize router
-	router := handler.NewRouter(cfg.AppEnv)
+	router := handler.NewRouter(db, cfg, v)
 
 	// Start server
 	if err := router.Run(":" + cfg.AppPort); err != nil {
