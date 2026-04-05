@@ -14,6 +14,7 @@ import (
 type StockService interface {
 	GetStock(ctx context.Context, productID string) (*entity.Product, error)
 	Adjust(ctx context.Context, productID string, userID string, req entity.StockAdjustmentRequest) error
+	GetMovements(ctx context.Context, productID string, filter repository.StockFilter) ([]entity.StockMovement, int, error)
 }
 
 // stockService implements StockService
@@ -95,4 +96,24 @@ func (s *stockService) Adjust(ctx context.Context, productID string, userID stri
 
 		return txProductRepo.UpdateStock(ctx, productID, newStock)
 	})
+}
+
+// GetMovements returns stock movements for a product with filtering and pagination
+func (s *stockService) GetMovements(ctx context.Context, productID string, filter repository.StockFilter) ([]entity.StockMovement, int, error) {
+	product, err := s.productRepo.FindByID(ctx, productID)
+	if err != nil {
+		return nil, 0, err
+	}
+	if product == nil {
+		return nil, 0, errors.New("produk tidak ditemukan")
+	}
+
+	if filter.Page <= 0 {
+		filter.Page = 1
+	}
+	if filter.Limit <= 0 {
+		filter.Limit = 20
+	}
+
+	return s.stockRepo.FindByProductID(ctx, productID, filter)
 }
