@@ -31,14 +31,17 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(db)
 	categoryRepo := repository.NewCategoryRepository(db)
+	productRepo := repository.NewProductRepository(db)
 
 	// Initialize services
 	authService := service.NewAuthService(userRepo, cfg.JWTSecret, cfg.JWTExpiryHours)
 	categoryService := service.NewCategoryService(categoryRepo)
+	productService := service.NewProductService(productRepo, categoryRepo)
 
 	// Initialize handlers
 	authHandler := NewAuthHandler(authService, v)
 	categoryHandler := NewCategoryHandler(categoryService, v)
+	productHandler := NewProductHandler(productService, v)
 
 	// API v1 routes
 	v1 := router.Group("/api/v1")
@@ -62,6 +65,12 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 			ownerGroup.POST("/categories", categoryHandler.Create)
 			ownerGroup.PUT("/categories/:id", categoryHandler.Update)
 			ownerGroup.DELETE("/categories/:id", categoryHandler.Delete)
+
+			ownerGroup.GET("/products", productHandler.FindAll)
+			ownerGroup.GET("/products/:id", productHandler.FindByID)
+			ownerGroup.POST("/products", productHandler.Create)
+			ownerGroup.PUT("/products/:id", productHandler.Update)
+			ownerGroup.DELETE("/products/:id", productHandler.Delete)
 		}
 
 		// Route group untuk cashier — semua endpoint di sini butuh login + role cashier
