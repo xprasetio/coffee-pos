@@ -10,6 +10,7 @@ import (
 	"github.com/xprasetio/coffee-pos/internal/repository"
 	"github.com/xprasetio/coffee-pos/internal/service"
 	"github.com/xprasetio/coffee-pos/pkg/response"
+	"github.com/xprasetio/coffee-pos/pkg/txmanager"
 	"github.com/xprasetio/coffee-pos/pkg/validator"
 )
 
@@ -43,6 +44,11 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 	categoryHandler := NewCategoryHandler(categoryService, v)
 	productHandler := NewProductHandler(productService, v)
 
+	stockRepo := repository.NewStockRepository(db)
+	txMgr := txmanager.New(db)
+	stockService := service.NewStockService(stockRepo, productRepo, txMgr)
+	stockHandler := NewStockHandler(stockService, v)
+
 	// API v1 routes
 	v1 := router.Group("/api/v1")
 	{
@@ -71,6 +77,9 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 			ownerGroup.POST("/products", productHandler.Create)
 			ownerGroup.PUT("/products/:id", productHandler.Update)
 			ownerGroup.DELETE("/products/:id", productHandler.Delete)
+
+			ownerGroup.GET("/products/:id/stock", stockHandler.GetStock)
+			ownerGroup.POST("/products/:id/stock/adjustment", stockHandler.Adjust)
 		}
 
 		// Route group untuk cashier — semua endpoint di sini butuh login + role cashier

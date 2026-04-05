@@ -49,15 +49,19 @@ func (r *stockRepository) Create(ctx context.Context, movement *entity.StockMove
 	movement.CreatedAt = now
 	movement.UpdatedAt = now
 
-	query := `INSERT INTO stock_movements (id, product_id, user_id, type, quantity,
-			stock_before, stock_after, notes, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	// Derive source from movement type
+	source := deriveSource(movement.Type)
+
+	query := `INSERT INTO stock_movements (id, product_id, user_id, movement_type, source, quantity,
+			previous_stock, current_stock, notes, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	_, err := r.db.ExecContext(ctx, query,
 		movement.ID,
 		movement.ProductID,
 		movement.UserID,
 		movement.Type,
+		source,
 		movement.Quantity,
 		movement.StockBefore,
 		movement.StockAfter,
@@ -67,6 +71,20 @@ func (r *stockRepository) Create(ctx context.Context, movement *entity.StockMove
 	)
 
 	return err
+}
+
+// deriveSource maps movement type to a default source value
+func deriveSource(movementType string) string {
+	switch movementType {
+	case entity.MovementTypeIn:
+		return "purchase"
+	case entity.MovementTypeOut:
+		return "sale"
+	case entity.MovementTypeAdjustment:
+		return "adjustment"
+	default:
+		return "adjustment"
+	}
 }
 
 // FindByProductID returns stock movements for a specific product with filters and pagination
@@ -97,7 +115,7 @@ func (r *stockRepository) FindByProductID(ctx context.Context, productID string,
 	}
 
 	if filter.Type != "" {
-		whereConditions = append(whereConditions, "sm.type = ?")
+		whereConditions = append(whereConditions, "sm.movement_type = ?")
 		args = append(args, filter.Type)
 	}
 
@@ -118,8 +136,8 @@ func (r *stockRepository) FindByProductID(ctx context.Context, productID string,
 	}
 
 	// Data query
-	dataQuery := `SELECT sm.id, sm.product_id, sm.user_id, sm.type, sm.quantity,
-			sm.stock_before, sm.stock_after, sm.notes, sm.created_at, sm.updated_at,
+	dataQuery := `SELECT sm.id, sm.product_id, sm.user_id, sm.movement_type, sm.quantity,
+			sm.previous_stock, sm.current_stock, sm.notes, sm.created_at, sm.updated_at,
 			p.id, p.name,
 			u.id, u.name
 		` + baseQuery + ` ORDER BY sm.created_at DESC LIMIT ? OFFSET ?`
@@ -204,7 +222,7 @@ func (r *stockRepository) FindAll(ctx context.Context, filter StockFilter) ([]en
 	}
 
 	if filter.Type != "" {
-		whereConditions = append(whereConditions, "sm.type = ?")
+		whereConditions = append(whereConditions, "sm.movement_type = ?")
 		args = append(args, filter.Type)
 	}
 
@@ -228,8 +246,8 @@ func (r *stockRepository) FindAll(ctx context.Context, filter StockFilter) ([]en
 	}
 
 	// Data query
-	dataQuery := `SELECT sm.id, sm.product_id, sm.user_id, sm.type, sm.quantity,
-			sm.stock_before, sm.stock_after, sm.notes, sm.created_at, sm.updated_at,
+	dataQuery := `SELECT sm.id, sm.product_id, sm.user_id, sm.movement_type, sm.quantity,
+			sm.previous_stock, sm.current_stock, sm.notes, sm.created_at, sm.updated_at,
 			p.id, p.name,
 			u.id, u.name
 		` + baseQuery + ` ORDER BY sm.created_at DESC LIMIT ? OFFSET ?`
