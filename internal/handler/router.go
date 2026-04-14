@@ -49,6 +49,10 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 	stockService := service.NewStockService(stockRepo, productRepo, txMgr)
 	stockHandler := NewStockHandler(stockService, v)
 
+	tableRepo := repository.NewTableRepository(db)
+	tableService := service.NewTableService(tableRepo)
+	tableHandler := NewTableHandler(tableService, v)
+
 	// API v1 routes
 	v1 := router.Group("/api/v1")
 	{
@@ -81,6 +85,11 @@ func NewRouter(db *sql.DB, cfg *config.Config, v *validator.Validator) *gin.Engi
 			ownerGroup.GET("/products/:id/stock", stockHandler.GetStock)
 			ownerGroup.POST("/products/:id/stock/adjustment", stockHandler.Adjust)
 			ownerGroup.GET("/products/:id/stock/movements", stockHandler.GetMovements)
+
+			ownerGroup.GET("/tables", tableHandler.FindAll)
+			ownerGroup.POST("/tables", tableHandler.Create)
+			ownerGroup.PUT("/tables/:id", tableHandler.Update)
+			ownerGroup.DELETE("/tables/:id", tableHandler.Delete)
 		}
 
 		// Route group untuk cashier — semua endpoint di sini butuh login + role cashier
